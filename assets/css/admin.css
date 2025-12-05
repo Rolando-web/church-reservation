@@ -1,0 +1,57 @@
+/* Clean Admin Styles */
+:root{
+  --primary:#002B5C;
+  --primary-dark:#001A3D;
+  --muted:#6B7280;
+  --card:#ffffff;
+  --overlay:rgba(0,43,92,.78);
+}
+body.admin { 
+  background: linear-gradient(var(--overlay), var(--overlay)), url('../images/login.png');
+  background-size: cover; background-position: center; background-attachment: fixed;
+  color: #f1f5f9;
+}
+.admin-container { max-width: 1400px; margin: 0 auto; }
+
+/* Navbar */
+.admin-navbar { background: var(--primary-dark); border-bottom: 1px solid #0f2f55; padding: 0.5rem 1.25rem; position:fixed; top:0; left:0; width:100%; z-index:60; }
+.admin-navbar .brand { display:flex; align-items:center; gap:0.75rem; font-weight:700; color:#fff; }
+.admin-navbar .brand img{ height:34px; width:34px; border-radius:6px; box-shadow:0 0 0 2px #ffffff22; }
+/* Removed search bar per user request */
+
+/* Sidebar */
+.admin-sidebar { width:260px; background: #ffffff; height:100vh; border-right:1px solid #e6e7eb; position:fixed; left:0; top:0; padding-top:70px; box-shadow:0 0 12px -4px rgba(0,0,0,.25); }
+.admin-sidebar nav a { display:flex; gap:.75rem; align-items:center; padding:.75rem 1rem; color:#374151; border-left:3px solid transparent; }
+.admin-sidebar nav a:hover { background:#f8fafc; color:var(--primary); border-left-color:var(--primary); }
+.admin-sidebar nav a.active { background:#eef2ff; color:var(--primary); border-left-color:var(--primary); font-weight:600; }
+
+/* Main content shift to accommodate sidebar */
+.admin-main { margin-left: 260px; padding:calc(70px + 1.5rem) 2rem 2rem; min-height:100vh; }
+
+/* Cards and tables */
+.card { background:rgba(255,255,255,0.95); border-radius:14px; padding:1.25rem 1.5rem; box-shadow: 0 4px 12px -2px rgba(0,0,0,0.15); border:1px solid #e2e8f0; backdrop-filter:blur(4px); }
+.stat { display:flex; justify-content:space-between; align-items:center; padding:1rem; border-radius:8px; }
+.status-badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:600; }
+.status-pending{ background:#fff7ed; color:#b45309; }
+.status-approved{ background:#ecfdf5; color:#059669; }
+.status-paid{ background:#ecfeff; color:#0ea5a4; }
+.status-rejected{ background:#fff1f2; color:#be123c; }
+
+/* Buttons */
+.btn { display:inline-flex; align-items:center; gap:.5rem; padding:.5rem .9rem; border-radius:8px; font-weight:600; border:1px solid transparent; }
+.btn-primary { background:var(--primary); color:#fff; }
+.btn-primary:hover { background:#003d85; }
+.btn-ghost { background:transparent; color:#fff; border:1px solid #ffffff30; }
+.btn-ghost:hover { background:#ffffff12; }
+.btn-ghost { background:transparent; color:var(--primary); border:1px solid #e6e7eb; }
+
+/* Responsive */
+@media (max-width: 768px){
+  .admin-navbar{ position:fixed; }
+  .admin-sidebar{ position:fixed; transform:translateX(-100%); transition:.3s ease; width:220px; }
+  .admin-sidebar.open{ transform:translateX(0); }
+  .admin-main{ margin-left:0; padding:calc(70px + 1rem) 1rem 1rem; }
+}
+
+/* Utility for alignment with logout button */
+.align-right-edge { max-width:1400px; }
