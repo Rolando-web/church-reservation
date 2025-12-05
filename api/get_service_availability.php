@@ -19,13 +19,13 @@ try {
     ");
     
     // Get all services and check if they have CURRENT active reservations
-    // Only consider reservations that are pending, approved, or paid AND haven't passed yet
+    // Only consider reservations that are pending or approved (not paid or completed)
     $stmt = $db->query("
         SELECT s.id, s.name, s.category,
         (SELECT COUNT(*) FROM reservations r 
          WHERE r.purpose = s.name 
          AND r.reservation_date >= CURDATE()
-         AND r.status IN ('pending', 'approved', 'paid')
+         AND r.status IN ('pending', 'approved')
          AND CONCAT(r.reservation_date, ' ', r.reservation_time) >= NOW()
         ) as active_reservations
         FROM services s

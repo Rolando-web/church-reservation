@@ -27,7 +27,8 @@ try {
         AND CONCAT(reservation_date, ' ', reservation_time) < NOW()
     ");
     
-    // Check if there's an active reservation (pending, approved, or paid) for this date and time
+    // Check if there's an active reservation (pending or approved only) for this date and time
+    // Paid and completed reservations no longer block the time slot
     // We'll consider a 2-hour window to prevent overlapping reservations
     // Also ensure the reservation hasn't already passed (still in the future)
     $stmt = $db->prepare("
@@ -35,7 +36,7 @@ try {
         FROM reservations r
         JOIN users u ON r.user_id = u.id
         WHERE r.reservation_date = ? 
-        AND r.status IN ('pending', 'approved', 'paid')
+        AND r.status IN ('pending', 'approved')
         AND CONCAT(r.reservation_date, ' ', TIME(r.reservation_time)) >= NOW()
         AND (
             TIME(r.reservation_time) = TIME(?)

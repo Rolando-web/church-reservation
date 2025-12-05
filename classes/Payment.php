@@ -30,10 +30,10 @@ class Payment {
             ");
             $stmt->execute([$reservationId, $amount, $paymentMethod, $paymentPhone, $paymentReference, $cardLast4, $cardHolder]);
 
-            // Update reservation payment status
+            // Update reservation payment status and mark as completed to free up the slot
             $stmt = $this->conn->prepare("
                 UPDATE reservations 
-                SET payment_status = 'paid', status = 'paid', updated_at = CURRENT_TIMESTAMP 
+                SET payment_status = 'paid', status = 'completed', updated_at = CURRENT_TIMESTAMP 
                 WHERE id = ?
             ");
             $stmt->execute([$reservationId]);
