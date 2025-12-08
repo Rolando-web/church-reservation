@@ -12,18 +12,26 @@ class Reservation {
     }
 
     // Create new reservation
-    public function create($userId, $reservationDate, $reservationTime, $purpose, $notes = null) {
+    public function create($userId, $reservationDate, $reservationTime, $purpose, $notes = null, $amount = null) {
         try {
             // Validate date is in future
             if (strtotime($reservationDate) < strtotime(date('Y-m-d'))) {
                 return ['success' => false, 'message' => 'Reservation date must be in the future'];
             }
 
+            // Always get the price from the services table based on purpose (service name)
+            $stmt = $this->conn->prepare("SELECT price FROM services WHERE name = ? LIMIT 1");
+            $stmt->execute([$purpose]);
+            $service = $stmt->fetch();
+            
+            // Use service price from database, fallback to passed amount or default
+            $amount = $service ? $service['price'] : ($amount ?? 1000.00);
+
             $stmt = $this->conn->prepare("
-                INSERT INTO reservations (user_id, reservation_date, reservation_time, purpose, notes, status, payment_status) 
-                VALUES (?, ?, ?, ?, ?, 'pending', 'unpaid')
+                INSERT INTO reservations (user_id, reservation_date, reservation_time, purpose, notes, amount, status, payment_status) 
+                VALUES (?, ?, ?, ?, ?, ?, 'pending', 'unpaid')
             ");
-            $stmt->execute([$userId, $reservationDate, $reservationTime, $purpose, $notes]);
+            $stmt->execute([$userId, $reservationDate, $reservationTime, $purpose, $notes, $amount]);
 
             $reservationId = $this->conn->lastInsertId();
 

@@ -17,6 +17,7 @@ switch ($action) {
         $reservationTime = $_POST['reservation_time'] ?? '';
         $purpose = $_POST['purpose'] ?? '';
         $notes = $_POST['notes'] ?? null;
+        $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : null;
 
         // If purpose is "Other", use other_purpose field
         if ($purpose === 'Other' && !empty($_POST['other_purpose'])) {
@@ -29,7 +30,7 @@ switch ($action) {
             exit;
         }
 
-        $result = $reservation->create($userId, $reservationDate, $reservationTime, $purpose, $notes);
+        $result = $reservation->create($userId, $reservationDate, $reservationTime, $purpose, $notes, $amount);
         
         if ($result['success']) {
             $_SESSION['success'] = 'Reservation request submitted successfully! Please wait for admin approval.';

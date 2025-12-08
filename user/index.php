@@ -494,7 +494,11 @@ $user_name = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Guest';
             const serviceName = card.querySelector('h3').textContent.trim();
             const serviceDesc = card.querySelector('.line-clamp-2').textContent.trim();
             const priceElement = card.querySelector('.text-2xl.font-bold');
-            const price = priceElement ? priceElement.textContent.trim() : 'Price not available';
+            // Get only the price number, removing the /service text
+            let priceText = priceElement ? priceElement.childNodes[0].textContent.trim() : '₱0';
+            // Extract numeric value (remove ₱ and commas)
+            const numericPrice = parseFloat(priceText.replace('₱', '').replace(/,/g, ''));
+            const displayPrice = '₱' + numericPrice.toLocaleString();
             
             // For now, we'll show basic info since features aren't displayed in cards
             // You can fetch full details via AJAX if needed
@@ -505,7 +509,20 @@ $user_name = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Guest';
             ];
             const purpose = serviceName;
             
-            openBookingModal(serviceName, serviceDesc, price, features, purpose);
+            // Pass the numeric price for the hidden input and display price for the modal
+            document.getElementById('modalTitle').textContent = 'Book ' + serviceName;
+            document.getElementById('modalServiceName').textContent = serviceName;
+            document.getElementById('modalServiceDesc').textContent = serviceDesc;
+            document.getElementById('modalPrice').textContent = displayPrice;
+            document.getElementById('servicePurpose').value = purpose;
+            document.getElementById('serviceAmount').value = numericPrice;
+            
+            // Display features
+            const featuresHtml = features.map(f => `<p class="flex items-start"><span class="mr-2" style="color: #002B5C;">✓</span>${f}</p>`).join('');
+            document.getElementById('modalFeatures').innerHTML = featuresHtml;
+            
+            document.getElementById('bookingModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
